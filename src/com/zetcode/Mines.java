@@ -8,8 +8,8 @@ import javax.swing.JLabel;
 /**
  * Java Minesweeper Game
  * 
- * http://zetcode.com/tutorials/javagamestutorial/minesweeper/
- * @author Jan Bodnar
+ * Author: Jan Bodnar
+ * Website: http://zetcode.com
  */
 
 public class Mines extends JFrame {
