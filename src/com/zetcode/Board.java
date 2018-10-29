@@ -59,8 +59,6 @@ public class Board extends JPanel {
             img[i] = (new ImageIcon(path)).getImage();
         }
 
-        setDoubleBuffered(true);
-
         addMouseListener(new MinesAdapter());
         newGame();
     }
