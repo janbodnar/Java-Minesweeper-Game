@@ -31,8 +31,8 @@ public class Board extends JPanel {
     private final int N_ROWS = 16;
     private final int N_COLS = 16;
 
-    private final int BOARD_WIDTH = N_ROWS * CELL_SIZE + 1;
-    private final int BOARD_HEIGHT = N_COLS * CELL_SIZE + 1;
+    private final int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
+    private final int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
 
     private int[] field;
     private boolean inGame;
@@ -55,7 +55,8 @@ public class Board extends JPanel {
         img = new Image[NUM_IMAGES];
 
         for (int i = 0; i < NUM_IMAGES; i++) {
-            String path = "src/resources/" + i + ".png";
+
+            var path = "src/resources/" + i + ".png";
             img[i] = (new ImageIcon(path)).getImage();
         }
 
@@ -67,7 +68,7 @@ public class Board extends JPanel {
 
         int cell;
 
-        Random random = new Random();
+        var random = new Random();
         inGame = true;
         minesLeft = N_MINES;
 
@@ -75,13 +76,14 @@ public class Board extends JPanel {
         field = new int[allCells];
 
         for (int i = 0; i < allCells; i++) {
+
             field[i] = COVER_FOR_CELL;
         }
 
         statusbar.setText(Integer.toString(minesLeft));
 
         int i = 0;
-        
+
         while (i < N_MINES) {
 
             int position = (int) (allCells * random.nextDouble());
@@ -121,7 +123,7 @@ public class Board extends JPanel {
                         field[cell] += 1;
                     }
                 }
-                
+
                 cell = position + N_COLS;
                 if (cell < allCells) {
                     if (field[cell] != COVERED_MINE_CELL) {
@@ -153,7 +155,7 @@ public class Board extends JPanel {
         }
     }
 
-    public void find_empty_cells(int j) {
+    private void find_empty_cells(int j) {
 
         int current_col = j % N_COLS;
         int cell;
@@ -250,15 +252,18 @@ public class Board extends JPanel {
         int uncover = 0;
 
         for (int i = 0; i < N_ROWS; i++) {
+
             for (int j = 0; j < N_COLS; j++) {
 
                 int cell = field[(i * N_COLS) + j];
 
                 if (inGame && cell == MINE_CELL) {
+
                     inGame = false;
                 }
 
                 if (!inGame) {
+
                     if (cell == COVERED_MINE_CELL) {
                         cell = DRAW_MINE;
                     } else if (cell == MARKED_MINE_CELL) {
@@ -270,6 +275,7 @@ public class Board extends JPanel {
                     }
 
                 } else {
+
                     if (cell > COVERED_MINE_CELL) {
                         cell = DRAW_MARK;
                     } else if (cell > MINE_CELL) {
@@ -284,8 +290,10 @@ public class Board extends JPanel {
         }
 
         if (uncover == 0 && inGame) {
+
             inGame = false;
             statusbar.setText("Game won");
+
         } else if (!inGame) {
             statusbar.setText("Game lost");
         }
@@ -315,9 +323,11 @@ public class Board extends JPanel {
                 if (e.getButton() == MouseEvent.BUTTON3) {
 
                     if (field[(cRow * N_COLS) + cCol] > MINE_CELL) {
+
                         doRepaint = true;
 
                         if (field[(cRow * N_COLS) + cCol] <= COVERED_MINE_CELL) {
+
                             if (minesLeft > 0) {
                                 field[(cRow * N_COLS) + cCol] += MARK_FOR_CELL;
                                 minesLeft--;
@@ -338,6 +348,7 @@ public class Board extends JPanel {
                 } else {
 
                     if (field[(cRow * N_COLS) + cCol] > COVERED_MINE_CELL) {
+
                         return;
                     }
 
@@ -350,7 +361,7 @@ public class Board extends JPanel {
                         if (field[(cRow * N_COLS) + cCol] == MINE_CELL) {
                             inGame = false;
                         }
-                        
+
                         if (field[(cRow * N_COLS) + cCol] == EMPTY_CELL) {
                             find_empty_cells((cRow * N_COLS) + cCol);
                         }
@@ -360,9 +371,7 @@ public class Board extends JPanel {
                 if (doRepaint) {
                     repaint();
                 }
-
             }
         }
     }
 }
-
