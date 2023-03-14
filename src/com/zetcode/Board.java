@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -33,14 +34,12 @@ public class Board extends JPanel {
 
     private final int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
     private final int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
-
+    private final JLabel statusbar;
     private int[] field;
     private boolean inGame;
     private int minesLeft;
     private Image[] img;
-
     private int allCells;
-    private final JLabel statusbar;
 
     public Board(JLabel statusbar) {
 
@@ -56,8 +55,9 @@ public class Board extends JPanel {
 
         for (int i = 0; i < NUM_IMAGES; i++) {
 
-            var path = "src/resources/" + i + ".png";
-            img[i] = (new ImageIcon(path)).getImage();
+            var path = "resources/" + i + ".png"; //made src as source folder, now this path should be correct
+            img[i] = (new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource(
+                    path)))).getImage(); //this way it should also show images when executing remote jar file or class from terminal
         }
 
         addMouseListener(new MinesAdapter());
@@ -80,7 +80,7 @@ public class Board extends JPanel {
             field[i] = COVER_FOR_CELL;
         }
 
-        statusbar.setText(Integer.toString(minesLeft));
+        statusbar.setText(minesLeft + " mines left"); //not a big change)
 
         int i = 0;
 
@@ -331,7 +331,12 @@ public class Board extends JPanel {
                             if (minesLeft > 0) {
                                 field[(cRow * N_COLS) + cCol] += MARK_FOR_CELL;
                                 minesLeft--;
-                                String msg = Integer.toString(minesLeft);
+                                String msg;
+                                if (minesLeft == 1) { // just for interface purpose
+                                    msg = "1 mine left";
+                                } else {
+                                    msg = minesLeft + " mines left";
+                                }
                                 statusbar.setText(msg);
                             } else {
                                 statusbar.setText("No marks left");
@@ -340,7 +345,12 @@ public class Board extends JPanel {
 
                             field[(cRow * N_COLS) + cCol] -= MARK_FOR_CELL;
                             minesLeft++;
-                            String msg = Integer.toString(minesLeft);
+                            String msg;
+                            if (minesLeft == 1) {
+                                msg = "1 mine left";
+                            } else {
+                                msg = minesLeft + " mines left";
+                            }
                             statusbar.setText(msg);
                         }
                     }
